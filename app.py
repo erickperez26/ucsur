@@ -1,29 +1,34 @@
 import streamlit as st
 import random
-import time
 
-st.set_page_config(page_title="Ecuaciones de Primer Grado", page_icon="🧠")
+st.set_page_config(page_title="Ecuaciones de primer grado", page_icon="🧮")
 
-st.title("🧮 Resolver Ecuaciones de Primer Grado")
+st.title("🧮 Resolviendo ecuaciones de primer grado")
 
-# Generar ecuación aleatoria
-a = random.randint(1, 10)
-x_real = random.randint(1, 20)
-b = random.randint(0, 10)
+# --- Generar la ecuación aleatoria ---
+if "a" not in st.session_state:
+    st.session_state.a = random.randint(1, 10)
+    st.session_state.b = random.randint(-10, 10)
+    st.session_state.x = random.randint(-10, 10)
+    st.session_state.c = st.session_state.a * st.session_state.x + st.session_state.b
 
-resultado = a * x_real + b
-ecuacion = f"{a}x + {b} = {resultado}"
+st.write("Resuelve la ecuación:")
 
-st.subheader("Resuelve la siguiente ecuación:")
+ecuacion = f"{st.session_state.a}x + {st.session_state.b} = {st.session_state.c}"
 st.latex(ecuacion)
 
-# Campo para la respuesta (solo enteros)
-respuesta = st.number_input("Ingresa el valor de x (solo números enteros)", step=1, format="%d")
+# --- Campo para ingresar la respuesta ---
+respuesta = st.number_input("Ingresa el valor de x (solo enteros):", step=1, format="%d")
 
-# Botón para verificar
+# --- Botón para verificar ---
 if st.button("Verificar"):
-    if respuesta == x_real:
-        st.success("✅ ¡Correcto!")
+    if respuesta == st.session_state.x:
+        st.success("🎉 ¡Correcto! Bien hecho.")
         st.balloons()
+        # Reiniciar con nueva ecuación
+        st.session_state.a = random.randint(1, 10)
+        st.session_state.b = random.randint(-10, 10)
+        st.session_state.x = random.randint(-10, 10)
+        st.session_state.c = st.session_state.a * st.session_state.x + st.session_state.b
     else:
         st.error("❌ Incorrecto. Intenta de nuevo.")
